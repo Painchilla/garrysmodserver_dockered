@@ -24,6 +24,9 @@ RUN mkdir /srv \
 	    +force_install_dir /srv/content +app_update 232330 \
         +quit
 
+#COPY Server.cfg and mount.cfg
+COPY *.cfg /srv/gmod/cfg/
+
 #Expose all needed ports
 EXPOSE 27015/udp
 EXPOSE 27015/tcp
