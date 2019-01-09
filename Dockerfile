@@ -37,7 +37,8 @@ RUN /usr/local/steam/steamcmd.sh \
         +login anonymous \
         +force_install_dir /srv/gmod +app_update 4020 \
 	    +force_install_dir /srv/content +app_update 232330 \
-        +quit
+        +quit && \
+	chown steam:steam /srv -R
 
 #COPY Server.cfg and mount.cfg
 COPY *.cfg /srv/gmod/cfg/
@@ -53,11 +54,18 @@ VOLUME /srv/gmod/garrysmod/cache
 ##CHANGE USER to steam
 USER steam
 ENV HOME /home/steam
+ENV GMOD_MAP gm_construct
+ENV GMOD_MAX_PLAYERS 16
+ENV GMOD_GAMEMODE sandbox
+ENV GMOD_WORKSHO_COLLECTION false
+ENV STEAM_APIKEY false
+ENV DEBUG false
 
+#Copy Entrypoint-script into container
+COPY entrypoint.sh /usr/bin/
 
 #Start Gmod server
 #The Entrypoint ensures that the GMod-Server listens on all IP's not just on the Dockercontainers internal address
-ENTRYPOINT ["/srv/gmod/srcds_run","-ip","0.0.0.0"]
-#The CMD can be modified to run any custom commandline Options
-CMD ["-game","garrysmod","+maxplayers","16","+map","gm_flatgrass"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
 
