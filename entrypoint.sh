@@ -1,7 +1,8 @@
 #! /bin/bash
 #Setze Entsprechende Rechte für die Serverfiles
-echo "Changing User-permissions on Gamefiles..."
-sudo chown steam:steam /srv -R
+echo "Changing User-permissions on Workshop-Content"
+sudo chown steam:steam /srv/gmod/steam_cache -R
+sudo chown steam:steam /srv/gmod/garrysmod/cache -R
 
 COMMAND="/srv/gmod/srcds_run -ip 0.0.0.0 +game garrysmod +map $GMOD_MAP +maxplayers $GMOD_MAX_PLAYERS +gamemode $GMOD_GAMEMODE"
 
