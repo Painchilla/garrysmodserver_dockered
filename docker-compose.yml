@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  ttt:
+    image: painchilla/gmod-server
+    restart: always
+    ports:
+      - '27015:27015'
+      - '27015:27015/udp'
+    volumes:
+      - './server.cfg:/srv/gmod/cfg/server.cfg'
+      - 'steam_cache:/srv/gmod/steam_cache'
+      - 'gmod_cache:/srv/gmod/garrysmod/cache'
+    command: '-game garrysmod +maxplayers 16 +map ttt_waterworld +gamemode terrortown +host_workshop_collection 1619102303 -authkey <STEAM-API-KEY>'
+
+volumes:
+  steam_cache:
+  gmod_cache:
+  
