@@ -12,6 +12,19 @@ RUN apt-get update \
     && apt autoclean \
     && rm -r /var/cache/apt
     
+##Setup Steam User 
+RUN apt install sudo && \
+    export uid=1001 gid=1001 && \
+    mkdir -p /home/steam && \
+    echo "steam:x:${uid}:${gid}:steam,,,:/home/steam:/bin/bash" >> /etc/passwd &&\
+    echo "steam:x:${uid}:" >> /etc/group && \
+    echo "steam ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/steam && \
+    chmod 0440 /etc/sudoers.d/steam && \
+    chown ${uid}:${gid} -R /home/steam && \
+    chown ${uid}:${gid} -R /srv && \
+    apt autoclean && \
+    apt autoremove && \
+    rm -rf /var/chache/apt
 
 ##Install SteamCMD
 RUN mkdir /usr/local/steam \
@@ -38,20 +51,6 @@ VOLUME /srv/gmod/steam_cache
 VOLUME /srv/gmod/garrysmod/cache
 
 ##CHANGE USER to steam
-
-RUN apt install sudo && \
-    export uid=1001 gid=1001 && \
-    mkdir -p /home/steam && \
-    echo "steam:x:${uid}:${gid}:steam,,,:/home/steam:/bin/bash" >> /etc/passwd &&\
-    echo "steam:x:${uid}:" >> /etc/group && \
-    echo "steam ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/steam && \
-    chmod 0440 /etc/sudoers.d/steam && \
-    chown ${uid}:${gid} -R /home/steam && \
-    chown ${uid}:${gid} -R /srv && \
-    apt autoclean && \
-    apt autoremove && \
-    rm -rf /var/chache/apt
-
 USER steam
 ENV HOME /home/steam
 
