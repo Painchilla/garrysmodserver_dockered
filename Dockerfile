@@ -25,6 +25,8 @@ RUN apt install sudo && \
     apt autoclean && \
     apt autoremove && \
     rm -rf /var/chache/apt
+    
+
 
 ##Install SteamCMD
 RUN mkdir /usr/local/steam \
@@ -32,16 +34,20 @@ RUN mkdir /usr/local/steam \
     && wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz \
     && tar -xzf steamcmd_linux.tar.gz
 
+#Copy Entrypoint-script into container
+COPY entrypoint.sh /usr/bin/
+
+#COPY Server.cfg and mount.cfg
+COPY *.cfg /srv/gmod/cfg/
+
 ##Install Garrysmod
 RUN /usr/local/steam/steamcmd.sh \
         +login anonymous \
         +force_install_dir /srv/gmod +app_update 4020 \
 	    +force_install_dir /srv/content +app_update 232330 \
         +quit && \
-	chown steam:steam /srv -R
-
-#COPY Server.cfg and mount.cfg
-COPY *.cfg /srv/gmod/cfg/
+	chown steam:steam /srv -R && \
+	chmod +x /usr/bin/entrypoint.sh
 
 #Expose all needed ports
 EXPOSE 27015/udp
@@ -61,11 +67,7 @@ ENV GMOD_WORKSHOP_COLLECTION false
 ENV STEAM_APIKEY false
 ENV DEBUG false
 
-#Copy Entrypoint-script into container
-COPY entrypoint.sh /usr/bin/
 
 #Start Gmod server
 #The Entrypoint ensures that the GMod-Server listens on all IP's not just on the Dockercontainers internal address
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-
-
