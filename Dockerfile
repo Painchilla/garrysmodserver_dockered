@@ -1,6 +1,9 @@
 #Use Debian Stretch-slim as base
 FROM debian:stretch-slim
 
+#Set Frontend to noninteractive to stop some errors
+ENV DEBIAN_FRONTEND noninteractiv
+
 ##Update Packages and install 32bit gcc, wget and htop.
 RUN apt-get update \
     && apt upgrade -y \
@@ -17,8 +20,7 @@ RUN mkdir /usr/local/steam \
     && tar -xzf steamcmd_linux.tar.gz
 
 ##Install Garrysmod
-RUN mkdir /srv \
-    && /usr/local/steam/steamcmd.sh \
+RUN /usr/local/steam/steamcmd.sh \
         +login anonymous \
         +force_install_dir /srv/gmod +app_update 4020 \
 	    +force_install_dir /srv/content +app_update 232330 \
