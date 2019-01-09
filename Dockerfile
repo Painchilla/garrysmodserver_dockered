@@ -33,6 +33,10 @@ COPY *.cfg /srv/gmod/cfg/
 EXPOSE 27015/udp
 EXPOSE 27015/tcp
 
+#Setup Volumes to store Steam Workshop-Content over Restarts
+VOLUME /srv/gmod/steam_cache
+VOLUME /srv/gmod/garrysmod/cache
+
 ##CHANGE USER to steam
 
 RUN apt install sudo && \
