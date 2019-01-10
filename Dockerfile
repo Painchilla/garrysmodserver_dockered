@@ -44,7 +44,6 @@ COPY *.cfg /srv/gmod/cfg/
 RUN /usr/local/steam/steamcmd.sh \
         +login anonymous \
         +force_install_dir /srv/gmod +app_update 4020 \
-	    +force_install_dir /srv/content +app_update 232330 \
         +quit && \
 	chown steam:steam /srv -R && \
 	chmod +x /usr/bin/entrypoint.sh
